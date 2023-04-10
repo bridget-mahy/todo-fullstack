@@ -6,3 +6,7 @@ export interface Todo {
 }
 
 export type TodoCreate = Partial<Omit<Todo, 'id' | 'createdAt' | 'isComplete'>>
+export type TodoUpdate = Partial<Omit<Todo, 'id' | 'createdAt'>> & {
+  task?: string
+  isComplete?: boolean
+}

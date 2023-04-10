@@ -1,10 +1,15 @@
 import knex from 'knex'
 import config from './knexfile'
-import { Todo, TodoCreate } from '../../models/todo'
+import { Todo, TodoCreate, TodoUpdate } from '../../models/todo'
 const connection = knex(config.development)
 
 export async function getTodos(db = connection): Promise<Todo[]> {
-  return await db('todos').select()
+  return await db('todos').select(
+    'todos.id',
+    'todos.task',
+    'todos.created_at as createdAt',
+    'todos.is_complete as isComplete'
+  )
 }
 
 export async function addTodo(
@@ -21,5 +26,14 @@ export async function addTodo(
 
 export async function deleteTodo(id: number, db = connection): Promise<Todo[]> {
   await db('todos').where('id', id).del()
+  return getTodos()
+}
+
+export async function updateTodo(
+  id: number,
+  updatedTodo: TodoUpdate,
+  db = connection
+) {
+  await db<Todo>('todos').update(updatedTodo).where({ id })
   return getTodos()
 }

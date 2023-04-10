@@ -41,4 +41,16 @@ router.delete('/:id', async (req, res) => {
   }
 })
 
+// UPDATE /api/v1/todos/:id
+router.patch('/:id', async (req, res) => {
+  try {
+    const id = Number(req.params.id)
+    const post = req.body
+    const todos: Todo[] = await db.updateTodo(id, post)
+    res.json({ todos })
+  } catch (err) {
+    res.status(500)
+  }
+})
+
 export default router

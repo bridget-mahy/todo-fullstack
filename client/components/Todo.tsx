@@ -1,26 +1,50 @@
-// need a prop w Todo interface
-import * as Models from '../../models/todo'
+import { ChangeEvent, FormEvent, useState } from 'react'
+import { Todo, TodoUpdate } from '../../models/todo'
+import { deleteATodo, editTodo } from '../actions/todos'
+import { useAppDispatch } from '../hooks'
+type Props = Todo
+export default function ToDo(todo: Props) {
+  const [newTodo, setNewTodo] = useState({
+    task: '',
+    isComplete: false,
+  } as TodoUpdate)
+  const dispatch = useAppDispatch()
 
-// type Props = Models.Todo
-interface Props {
-  todo: Models.Todo
-  hello: string
-}
+  function handleDelete() {
+    dispatch(deleteATodo(todo.id))
+  }
 
-export default function ToDo({ todo, hello }: Props) {
+  function handleCheck() {
+    setNewTodo({ isComplete: true })
+    dispatch(editTodo(todo.id, { isComplete: todo.isComplete }))
+  }
+
+  function handleEdit(event: ChangeEvent<HTMLInputElement>) {
+    setNewTodo({ task: event.target.value })
+  }
+
+  function handleSubmit(event: FormEvent<HTMLInputElement>) {
+    event.preventDefault()
+    dispatch(editTodo(todo.id, newTodo))
+    setNewTodo({ task: '' })
+  }
+
   return (
     <li className={todo.isComplete ? 'completed' : ''}>
       <div className="view">
-        <input className="toggle" type="checkbox" checked={todo.isComplete} />
+        <input
+          className="toggle"
+          type="checkbox"
+          onClick={handleCheck}
+          checked={todo.isComplete}
+        />
         <label htmlFor="view">{todo.task}</label>
-        <button className="destroy"></button>
+        <button className="destroy" onChange={handleDelete}></button>
       </div>
       {/* below will require li to have classname="editing" */}
-      {/* <input className="edit" value="Create a TodoMVC template" /> */}
+      <input className="edit" onChange={handleEdit} onSubmit={handleSubmit} />
 
-      {/* List items should get the className `editing` when editing and `completed` when marked as completed */}
       {/* conditional rendering - edit also done conditionally based on user event, PATCH checkbox click edits isComplete boolean*/}
-      {/* li classname="editing" will hide div "view"*/}
     </li>
   )
 }

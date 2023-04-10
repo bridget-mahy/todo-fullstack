@@ -1,40 +1,28 @@
 import Todo from './Todo'
+import { useEffect, useState } from 'react'
+import { useAppDispatch, useAppSelector } from '../hooks'
+import { fetchTodos } from '../actions/todos'
+import { TodoCreate } from '../../models/todo'
 
 export default function TodoList() {
-  const array = [
-    {
-      id: 1,
-      task: 'mow the lawn',
-      createdAt: 1681078014693,
-      isComplete: true,
-    },
-    {
-      id: 2,
-      task: 'make ice coffee',
-      createdAt: 1681078014693,
-      isComplete: false,
-    },
-    {
-      id: 3,
-      task: 'listen to new playlist',
-      createdAt: 1681078014693,
-      isComplete: false,
-    },
-    {
-      id: 6,
-      task: 'log on',
-      createdAt: 1681085268525,
-      isComplete: false,
-    },
-  ]
+  const { loading, error, data: todos } = useAppSelector((state) => state.todos)
+
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(fetchTodos())
+  }, [dispatch])
+
   return (
     <>
       <section className="main">
         <input id="toggle-all" className="toggle-all" type="checkbox" />
         <label htmlFor="toggle-all">Mark all as complete</label>
+        {loading && <p>Loading</p>}
+        {error && <p>Something went wrong</p>}
         <ul className="todo-list">
-          {array.map((todo) => (
-            <Todo key={todo.id} todo={todo} hello="hello" />
+          {todos.map((todo) => (
+            <Todo key={todo.id} {...todo} />
           ))}
         </ul>
       </section>
