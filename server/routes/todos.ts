@@ -50,7 +50,6 @@ router.patch('/:id', async (req, res) => {
       is_complete: todo.isComplete,
       task: todo.task,
     }
-    console.log(todoSnake)
     const todos: Todo[] = await db.updateTodo(id, todoSnake)
     res.json({ todos })
   } catch (err) {

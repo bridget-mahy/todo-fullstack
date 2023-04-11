@@ -34,7 +34,6 @@ export async function updateTodo(
   updatedTodo: TodoUpdateSnake,
   db = connection
 ) {
-  console.log('database updated todo:', updatedTodo, 'id:', id)
   await db<Todo>('todos').update(updatedTodo).where({ id })
   return getTodos()
 }

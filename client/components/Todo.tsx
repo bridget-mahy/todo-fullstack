@@ -18,7 +18,7 @@ export default function ToDo(todo: Props) {
 
   function handleCheck() {
     const updatedIsComplete = !todo.isComplete
-    setUpdatedTodo({ ...todo, isComplete: updatedIsComplete })
+    setUpdatedTodo({ isComplete: updatedIsComplete, task: todo.task })
     dispatch(editTodo(todo.id, { isComplete: updatedIsComplete }))
   }
 
@@ -36,7 +36,9 @@ export default function ToDo(todo: Props) {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    dispatch(editTodo(todo.id, { task: updatedTodo.task }))
+    dispatch(
+      editTodo(todo.id, { task: updatedTodo.task, isComplete: todo.isComplete })
+    )
     setIsEditing(false)
   }
 
@@ -52,7 +54,7 @@ export default function ToDo(todo: Props) {
           className="toggle"
           type="checkbox"
           onChange={handleCheck}
-          checked={updatedTodo.isComplete}
+          checked={todo.isComplete}
         />
         <label htmlFor="view">{todo.task}</label>
         <button className="destroy" onClick={handleDelete}></button>
@@ -67,8 +69,6 @@ export default function ToDo(todo: Props) {
           onBlur={handleBlur}
         />
       </form>
-
-      {/* conditional rendering - edit also done conditionally based on user event, PATCH checkbox click edits isComplete boolean*/}
     </li>
   )
 }
