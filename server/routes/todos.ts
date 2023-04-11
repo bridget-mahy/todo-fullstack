@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     const todos: Todo[] = await db.getTodos()
     return res.json({ todos })
   } catch (error) {
-    res.status(500)
+    res.sendStatus(500)
   }
 })
 
@@ -20,13 +20,13 @@ router.post('/', async (req, res) => {
   try {
     const newTodo: TodoCreate = req.body
     if (!newTodo.task) {
-      res.status(400).json({ message: 'New task cannot be empty' })
+      res.sendStatus(400).json({ message: 'New task cannot be empty' })
       return
     }
     const todos: Todo[] = await db.addTodo(newTodo)
     return res.json({ todos })
   } catch (error) {
-    res.status(500)
+    res.sendStatus(500)
   }
 })
 
@@ -37,7 +37,7 @@ router.delete('/:id', async (req, res) => {
     const todos: Todo[] = await db.deleteTodo(id)
     return res.json({ todos })
   } catch (error) {
-    res.status(500)
+    res.sendStatus(500)
   }
 })
 
@@ -53,7 +53,7 @@ router.patch('/:id', async (req, res) => {
     const todos: Todo[] = await db.updateTodo(id, todoSnake)
     res.json({ todos })
   } catch (err) {
-    res.status(500)
+    res.sendStatus(500)
   }
 })
 
