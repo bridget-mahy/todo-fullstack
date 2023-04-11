@@ -45,8 +45,13 @@ router.delete('/:id', async (req, res) => {
 router.patch('/:id', async (req, res) => {
   try {
     const id = Number(req.params.id)
-    const post = req.body
-    const todos: Todo[] = await db.updateTodo(id, post)
+    const todo = req.body
+    const todoSnake = {
+      is_complete: todo.isComplete,
+      task: todo.task,
+    }
+    console.log(todoSnake)
+    const todos: Todo[] = await db.updateTodo(id, todoSnake)
     res.json({ todos })
   } catch (err) {
     res.status(500)

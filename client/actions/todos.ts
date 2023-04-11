@@ -62,6 +62,7 @@ export function addNewTodo(newTodo: TodoCreate): ThunkAction {
 }
 
 export function deleteATodo(id: number): ThunkAction {
+  console.log('delete in actions getting hit')
   return async (dispatch) => {
     try {
       const todos = await deleteTodo(id)
@@ -78,6 +79,7 @@ export function editTodo(id: number, updatedTodo: TodoUpdate): ThunkAction {
       const todos = await updateTodo(id, updatedTodo)
       dispatch(setTodosSuccess(todos))
     } catch (err: any) {
+      console.log(err.message)
       dispatch(setError(err.message))
     }
   }

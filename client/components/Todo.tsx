@@ -1,13 +1,15 @@
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, FormEventHandler, useState } from 'react'
 import { Todo, TodoUpdate } from '../../models/todo'
 import { deleteATodo, editTodo } from '../actions/todos'
 import { useAppDispatch } from '../hooks'
 type Props = Todo
 export default function ToDo(todo: Props) {
-  const [newTodo, setNewTodo] = useState({
+  const [updatedTodo, setUpdatedTodo] = useState({
     task: '',
     isComplete: false,
   } as TodoUpdate)
+
+  const [isEditing, setIsEditing] = useState(false)
   const dispatch = useAppDispatch()
 
   function handleDelete() {
@@ -15,34 +17,56 @@ export default function ToDo(todo: Props) {
   }
 
   function handleCheck() {
-    setNewTodo({ isComplete: true })
-    dispatch(editTodo(todo.id, { isComplete: todo.isComplete }))
+    const updatedIsComplete = !todo.isComplete
+    setUpdatedTodo({ ...todo, isComplete: updatedIsComplete })
+    dispatch(editTodo(todo.id, { isComplete: updatedIsComplete }))
   }
 
   function handleEdit(event: ChangeEvent<HTMLInputElement>) {
-    setNewTodo({ task: event.target.value })
+    setUpdatedTodo({ task: event.target.value })
   }
 
-  function handleSubmit(event: FormEvent<HTMLInputElement>) {
+  const handleDblClick = () => {
+    setIsEditing(true)
+  }
+
+  const handleBlur = () => {
+    setIsEditing(false)
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    dispatch(editTodo(todo.id, newTodo))
-    setNewTodo({ task: '' })
+    dispatch(editTodo(todo.id, { task: updatedTodo.task }))
+    setIsEditing(false)
   }
 
   return (
-    <li className={todo.isComplete ? 'completed' : ''}>
+    <li
+      onDoubleClick={handleDblClick}
+      className={`${todo.isComplete ? 'completed' : ''} ${
+        isEditing ? 'editing' : ''
+      }`}
+    >
       <div className="view">
         <input
           className="toggle"
           type="checkbox"
-          onClick={handleCheck}
-          checked={todo.isComplete}
+          onChange={handleCheck}
+          checked={updatedTodo.isComplete}
         />
         <label htmlFor="view">{todo.task}</label>
-        <button className="destroy" onChange={handleDelete}></button>
+        <button className="destroy" onClick={handleDelete}></button>
       </div>
       {/* below will require li to have classname="editing" */}
-      <input className="edit" onChange={handleEdit} onSubmit={handleSubmit} />
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          className="edit"
+          value={updatedTodo.task}
+          onChange={handleEdit}
+          onBlur={handleBlur}
+        />
+      </form>
 
       {/* conditional rendering - edit also done conditionally based on user event, PATCH checkbox click edits isComplete boolean*/}
     </li>
