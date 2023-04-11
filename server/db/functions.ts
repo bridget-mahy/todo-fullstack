@@ -1,7 +1,7 @@
 import knex from 'knex'
 import config from './knexfile'
 import { Todo, TodoCreate, TodoUpdateSnake } from '../../models/todo'
-const connection = knex(config.development)
+import connection from './connection'
 
 export async function getTodos(db = connection): Promise<Todo[]> {
   return await db('todos').select(
