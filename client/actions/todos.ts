@@ -62,7 +62,6 @@ export function addNewTodo(newTodo: TodoCreate): ThunkAction {
 }
 
 export function deleteATodo(id: number): ThunkAction {
-  console.log('delete in actions getting hit')
   return async (dispatch) => {
     try {
       const todos = await deleteTodo(id)
