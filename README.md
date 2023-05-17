@@ -50,18 +50,18 @@ Here's a list of steps in case they are useful. You can build in any order you l
 
 ### 3. Setting the stage
 
-- [ ] Build a React component with static html
-- [ ] Design Redux global state (think of it like a JS object)
-- [ ] Build Redux reducers (the properties or keys of your state design are reducers, the values are hard-code static data as initialState)
+- [x] Build a React component with static html
+- [x] Design Redux global state (think of it like a JS object)
+- [x] Build Redux reducers (the properties or keys of your state design are reducers, the values are hard-code static data as initialState)
 
 ## 4. Building the API client
 
-- [ ] Build API client in the front end
+- [x] Build API client in the front end
 
 ### 6. Building thunky actions
 
-- [ ] Build Thunk actions to get task from the API
-- [ ] Build Redux actions to save task data from the API (remove hard-code initialState)
+- [x] Build Thunk actions to get task from the API
+- [x] Build Redux actions to save task data from the API (remove hard-code initialState)
 
 ---
 
